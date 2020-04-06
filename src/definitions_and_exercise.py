@@ -38,12 +38,12 @@ arr = [[8, 4], [90, -1, 3], [9, 62], [-7, -1, -56, -6], [201], [76, 18]]
 # 8 = arr[0][0]
 
 
-def minimum_numbers_sum(array):
-    # access every element of the array
+def minimum_numbers_sum(array):   # O(n*m)
     minimum_values_storage = 0
-    for element in array:    # O(n) 6
+    # access every element of the array
+    for element in array:    # O(n) n = 6
         # access the min value of that element
-        minimum_value = min(element)   # O(n) 
+        minimum_value = min(element)   # O(m) m varies with size of inner arrays
         # sum the min values for all the elements
         minimum_values_storage += minimum_value
     return minimum_values_storage

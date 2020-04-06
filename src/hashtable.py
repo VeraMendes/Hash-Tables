@@ -5,7 +5,7 @@ class LinkedPair:
     def __init__(self, key, value):
         self.key = key
         self.value = value
-        self.next = None
+        self.next_1 = None
 
 class HashTable:
     '''
@@ -32,7 +32,12 @@ class HashTable:
 
         OPTIONAL STRETCH: Research and implement DJB2
         '''
-        pass
+        # Start from an arbitrary large prime
+        hash_value = 5381
+        # Bit-shift and sum value for each character
+        for char in key:
+            hash_djb2 = ((hash_value << 5) + hash_value) + char
+        return hash_djb2
 
 
     def _hash_mod(self, key):
@@ -51,10 +56,15 @@ class HashTable:
         # investigate the impact this will have on the tests)
 
         # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
-
-        Fill this in.
         '''
-        pass
+        i = self._hash_mod(key)
+
+        if self.storage[i] == []:
+            # add value to it
+            node = value
+        # through error warning as the key was taken by other value 
+        else:
+            "This key has been taken"
 
 
 
@@ -63,10 +73,15 @@ class HashTable:
         Remove the value stored with the given key.
 
         Print a warning if the key is not found.
-
-        Fill this in.
         '''
-        pass
+        i = self._hash_mod(key)
+        node = self.storage[i]
+
+    
+        if node == []:
+            self.storage[i] = None
+        else:
+            return "Key is not found!"
 
 
     def retrieve(self, key):
@@ -74,18 +89,21 @@ class HashTable:
         Retrieve the value stored with the given key.
 
         Returns None if the key is not found.
-
-        Fill this in.
         '''
-        pass
+        i = self._hash_mod(key)
+        node = self.storage[i]
+
+    
+        if node == []:
+            return node.value
+        else:
+            return None
 
 
     def resize(self):
         '''
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
-
-        Fill this in.
         '''
         pass
 
