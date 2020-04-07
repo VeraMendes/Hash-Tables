@@ -6,7 +6,8 @@ class LinkedPair:
         self.key = key
         self.value = value
         self.next_1 = None
-    def __str__(self):
+
+    def __repr__(self):
         return f'<{self.key},{self.value}>'
 
 class HashTable:
@@ -73,7 +74,27 @@ class HashTable:
         # else:
         #     # if not, create a new LikedPair and place it in the bucket
         #     self.storage[i] = LinkedPair(key, value)
+        
+        # if a value for a key already exists, delete this value before adding a new one
+        if self.retrieve(key) != None:
+            self.remove(key)
 
+        # hashmod the key to find the index bucket
+        i = self._hash_mod(key)                  
+        
+        # check if pair already exists in the index
+        if self.storage[i]:
+            # a pair is in this index
+            pair = self.storage[i]
+            # check for next index
+            while pair.next_1:
+                pair = pair.next_1
+            # when no more pairs in the following index, we add new LinkedPair to end of list
+            pair.next_1 = LinkedPair(key, value)
+        # if it does not exist in the index, then add LinkedPair to the index
+        else:
+            # add the new linkedpair to the bucket space
+            self.storage[i] = LinkedPair(key, value)
 
 
 
@@ -95,14 +116,30 @@ class HashTable:
 
 
         i = self._hash_mod(key)
-        node = self.storage[i]
-  
-        while node:
-            if node.key == key:
-                node = None
-                return
-            node = node.next_1
-        print("Key was not found!")
+        pair = self.storage[i]
+        # defining a variable as None
+        removed_one = None
+
+        # while pair exists, next_pair is the next in the chain
+        while pair:
+            next_pair = pair.next_1
+            # if given key matches the key of the pair
+            if pair.key == key:
+            # break loop and this pair will be assigned as the variable removed_one
+                break
+            removed_one = pair
+
+            # assign the next pair as my current pair
+            pair = pair.next_1
+        
+        # remove pair from list
+        if removed_one:
+            removed_one.next_1 = next_pair
+
+        # pair was not found, nothing removed
+        else:
+            self.storage[i] = None
+
 
 
     def retrieve(self, key):
@@ -121,11 +158,19 @@ class HashTable:
         #     # else return None
         #     return None
 
-        while node:
-            if node.key == key:
-                return node.value
-            node = node.next_1
+        i = self._hash_mod(key)
+        pair = self.storage[i]
 
+        # while pair exists
+        while pair:
+            # if the given key matches the key of the pair
+            if pair.key == key:
+                # return the value for that key
+                return pair.value
+            # assign pair to next pair
+            pair = pair.next_1
+
+        # return None if key was not found
         return None
 
 
@@ -134,7 +179,22 @@ class HashTable:
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
         '''
-        pass
+        # double space
+        self.capacity *= 2
+        # copy old hash-table pairs
+        old_hashtable = self.storage.copy()
+        # new space for hashtable, ready to go!
+        self.storage = [None] * self.capacity
+ 
+        # checking all the range of old hashtable
+        for i in range(len(old_hashtable)):
+            # every node is the node of the copied hashtable
+            node = old_hashtable[i]
+            # while there are nodes to add, we add all the pairs from the copy into the new hashtable
+            while node:
+                self.insert(node.key, node.value)
+                node = node.next_1
+
 
 
 
