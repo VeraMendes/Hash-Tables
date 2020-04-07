@@ -6,6 +6,8 @@ class LinkedPair:
         self.key = key
         self.value = value
         self.next_1 = None
+    def __str__(self):
+        return f'<{self.key},{self.value}>'
 
 class HashTable:
     '''
@@ -57,14 +59,21 @@ class HashTable:
 
         # Part 2: Change this so that hash collisions are handled with Linked List Chaining.
         '''
-        i = self._hash_mod(key)
+        # # hashmod the key to find the bucket
+        # i = self._hash_mod(key)
+        # # check if pair already exists in the bucket
+        # pair = self.storage[i]
 
-        if self.storage[i] == []:
-            # add value to it
-            node = value
-        # through error warning as the key was taken by other value 
-        else:
-            "This key has been taken"
+        # if pair is not None:
+        #     # if so, overwrite the key/value and throw a warning
+        #     if pair.key != key:
+        #         print("Warning:Overwriting value")
+        #         pair.key = key
+        #     pair.value = value
+        # else:
+        #     # if not, create a new LikedPair and place it in the bucket
+        #     self.storage[i] = LinkedPair(key, value)
+
 
 
 
@@ -74,14 +83,26 @@ class HashTable:
 
         Print a warning if the key is not found.
         '''
+#         i = self._hash_mod(key)
+# ​
+#         # Check if a pair exists in the bucket with matching keys
+#         if self.storage[i] is not None and self.storage[i].key == key:
+#             # If so, remove that pair
+#             self.storage[i] = None
+#         else:
+#             # Else print warning
+#             print("Warning: Key does not exist")
+
+
         i = self._hash_mod(key)
         node = self.storage[i]
-
-    
-        if node == []:
-            self.storage[i] = None
-        else:
-            return "Key is not found!"
+  
+        while node:
+            if node.key == key:
+                node = None
+                return
+            node = node.next_1
+        print("Key was not found!")
 
 
     def retrieve(self, key):
@@ -90,14 +111,22 @@ class HashTable:
 
         Returns None if the key is not found.
         '''
-        i = self._hash_mod(key)
-        node = self.storage[i]
+        # # get the index from hashmod
+        # i = self._hash_mod(key)
+        # #check if a pair exists in the bucket with matching keys
+        # if self.storage[i] is not None and self.storage[key] == key:
+        #     # if so, return the value
+        #     return self.storage[i].value
+        # else:
+        #     # else return None
+        #     return None
 
-    
-        if node == []:
-            return node.value
-        else:
-            return None
+        while node:
+            if node.key == key:
+                return node.value
+            node = node.next_1
+
+        return None
 
 
     def resize(self):
